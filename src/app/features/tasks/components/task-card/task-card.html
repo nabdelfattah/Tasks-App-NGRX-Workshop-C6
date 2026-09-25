@@ -1,7 +1,7 @@
 @if (task() != undefined) {
-  <div class="block transition-all duration-200 hover:scale-[1.01] m-5">
+  <div class="flex gap-2 transition-all duration-200 m-5">
     <div
-      class="group flex items-center justify-between p-3 border rounded-xl transition-all duration-200 hover:shadow-sm"
+      class="group flex-1 flex items-center justify-between p-3 border rounded-xl transition-all duration-200 hover:shadow-sm"
       [class.bg-green-50]="task().completed"
       [class.border-green-200]="task().completed"
       [class.bg-white]="!task().completed"
@@ -31,5 +31,11 @@
         </span>
       </div>
     </div>
+    <button
+      (click)="deleteTask(task()._id)"
+      class="flex items-center justify-between p-3 cursor-pointer border rounded-xl transition-all duration-200 text-sm font-medium hover:shadow-sm"
+    >
+      delete
+    </button>
   </div>
 }

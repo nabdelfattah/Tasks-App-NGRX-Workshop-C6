@@ -19,4 +19,7 @@ export class TaskCard {
       tasksActions.toggle({ taskID: this.task()._id, completedStatus: this.task().completed! }),
     );
   }
+  deleteTask(taskID: string) {
+    this._store.dispatch(tasksActions.deleteTask({ taskID }));
+  }
 }

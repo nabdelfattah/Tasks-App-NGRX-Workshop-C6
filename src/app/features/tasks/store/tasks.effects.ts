@@ -15,7 +15,6 @@ export class TasksEffects {
       ofType(tasksActions.loadTasks),
       switchMap(() =>
         this._taskServices.getTasks().pipe(
-          tap((res) => console.log(res)),
           map((res) => tasksActions.loadSuccess({ tasks: res })),
           catchError((error) => of(tasksActions.loadFailure({ error: error }))),
         ),
@@ -28,7 +27,6 @@ export class TasksEffects {
       ofType(tasksActions.toggle),
       switchMap((params) =>
         this._taskServices.toggleTaskCompletion(params.taskID, !params.completedStatus).pipe(
-          tap((res) => console.log(res)),
           map((res) => tasksActions.toggleSuccess({ task: res })),
           catchError((error) => of(tasksActions.toggleFailure({ error: error }))),
         ),
@@ -40,12 +38,22 @@ export class TasksEffects {
     return this.actions$.pipe(
       ofType(tasksActions.addTask),
       switchMap(({ task }) => {
-        console.log({ task });
         return this._taskServices.createTask(task).pipe(
           map((res) => tasksActions.taskAddedSuccessfully({ task: res })),
           catchError((error) => of(tasksActions.taskAddFailed({ error }))),
         );
       }),
+    );
+  });
+  deleteTask$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(tasksActions.deleteTask),
+      switchMap(({ taskID }) =>
+        this._taskServices.deleteTask(taskID).pipe(
+          map((res) => tasksActions.taskDeletedSuccessfully({ taskID })),
+          catchError((error) => of(tasksActions.taskDeleteFailed(error))),
+        ),
+      ),
     );
   });
 }
