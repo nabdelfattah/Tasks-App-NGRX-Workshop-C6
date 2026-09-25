@@ -1,5 +1,6 @@
 import { Component, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TaskPayload } from '../../task.model';
 
 @Component({
   selector: 'app-add-task',
@@ -8,6 +9,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './add-task.scss',
 })
 export class AddTask {
+  add = output<TaskPayload>();
   form = new FormGroup({
     title: new FormControl('', Validators.required),
   });
@@ -15,6 +17,8 @@ export class AddTask {
   submit() {
     if (this.form.valid) {
       console.log('Emitting new task title:', this.form.value.title);
+      this.add.emit({ title: this.form.value.title!, user: 'Nada Wael' });
+      this.form.reset();
     }
   }
 }

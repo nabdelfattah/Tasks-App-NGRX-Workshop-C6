@@ -3,6 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tasksActions } from './tasks.actions';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { TaskServices } from '../services/task-services';
+import { TaskCard } from '../components/task-card/task-card';
 
 @Injectable()
 export class TasksEffects {
@@ -32,6 +33,19 @@ export class TasksEffects {
           catchError((error) => of(tasksActions.toggleFailure({ error: error }))),
         ),
       ),
+    );
+  });
+
+  addTask$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(tasksActions.addTask),
+      switchMap(({ task }) => {
+        console.log({ task });
+        return this._taskServices.createTask(task).pipe(
+          map((res) => tasksActions.taskAddedSuccessfully({ task: res })),
+          catchError((error) => of(tasksActions.taskAddFailed({ error }))),
+        );
+      }),
     );
   });
 }

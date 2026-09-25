@@ -1,3 +1,4 @@
+import { TaskId } from './../../../../../node_modules/@angular-devkit/schematics/src/engine/interface.d';
 import { createReducer, on } from '@ngrx/store';
 import { initialTaskState } from './tasks.state';
 import { tasksActions } from './tasks.actions';
@@ -41,4 +42,22 @@ export const tasksReducer = createReducer(
     ...state,
     filter,
   })),
+
+  on(tasksActions.addTask, (state) => ({ ...state, isLoading: true, error: null })),
+  on(tasksActions.taskAddedSuccessfully, (state, { task }) => ({
+    ...state,
+    isLoading: false,
+    error: null,
+    tasks: [...state.tasks, task],
+  })),
+  on(tasksActions.taskAddFailed, (state, { error }) => ({ ...state, isLoading: false, error })),
+
+  on(tasksActions.deleteTask, (state) => ({ ...state, isLoading: true, error: null })),
+  on(tasksActions.taskDeletedSuccessfully, (state, { taskID }) => ({
+    ...state,
+    isLoading: false,
+    error: null,
+    tasks: state.tasks.filter((task) => task._id !== taskID),
+  })),
+  on(tasksActions.taskDeleteFailed, (state, { error }) => ({ ...state, error, isLoading: false })),
 );

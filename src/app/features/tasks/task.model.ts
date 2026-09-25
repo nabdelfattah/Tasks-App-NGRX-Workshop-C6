@@ -4,6 +4,7 @@ export interface Task {
   completed?: boolean;
   user: string;
 }
+export type TaskPayload = Omit<Task, '_id'>;
 
 export type TaskFilter = 'all' | 'completed' | 'pending';
 
